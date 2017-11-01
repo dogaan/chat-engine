@@ -50,4 +50,31 @@ describe('#emitter', () => {
         assert(emitterInstance.plugins.length === 1, 'plugin works!');
         done();
     });
+
+    it('should assign state from a plugin', (done) => {
+
+        let plugin = () => {
+            class extension {
+                construct() {
+                    this.stringKey = 'plugin state';
+                }
+            }
+
+            return {
+                namespace: 'statePlugin',
+                extends: {
+                    Emitter: extension
+                }
+            };
+        };
+
+        emitterInstance.plugin(plugin());
+
+        assert(emitterInstance.plugins.length === 1, 'plugin works!');
+        assert(emitterInstance.statePlugin.stringKey === 'plugin state', 'got the expected value');
+
+        done();
+
+    });
+
 });
